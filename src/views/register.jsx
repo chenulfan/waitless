@@ -1,7 +1,7 @@
-const Login = () => {
+const Register = () => {
     return (
         <div>REGISTER</div>
     );
 }
 
-export default Login;
+export default Register;
