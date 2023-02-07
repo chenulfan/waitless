@@ -5,6 +5,7 @@ import {
   RouterProvider,
 } from "react-router-dom";
 import "./index.css";
+import Header from "./shared/components/header";
 import Home from "./views/home";
 import Login from "./views/login";
 import Register from "./views/register";
@@ -26,6 +27,7 @@ const router = createBrowserRouter([
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
+    <Header />
     <RouterProvider router={router} />
   </React.StrictMode>
 );
