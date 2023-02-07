@@ -1,6 +1,11 @@
+import { Button } from "../shared/components/button";
+
 const Login = () => {
     return (
-        <div>LOGIN</div>
+        <>
+            <div>LOGIN</div>
+            <Button />
+        </>
     );
 }
 
