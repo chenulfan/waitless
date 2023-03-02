@@ -1,4 +1,3 @@
-import { sptIconAdd } from "@spotinst/spot-icons/dist/icons/build/sptIcon-add.icon";
 import React from "react";
 import addNotification from "react-push-notification";
 const buttonClick = () => {
@@ -12,17 +11,13 @@ const buttonClick = () => {
 };
 export const Button = () => {
   return (
-<>
-<button
-      onClick={buttonClick}
-      class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-    >
-      Button
+  <>
+    <button
+          onClick={buttonClick}
+          class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+        >
+          Button
     </button>
-
-    <div  ref={node => node.innerHTML = sptIconAdd.data}>
-    </div>
-    </>
-
+  </>
   );
 };
