@@ -1,8 +1,23 @@
 import React from "react";
+import Select from "react-select";
+import AsyncSelect from "react-select/async";
+import DatePicker from "react-datepicker";
+import { useState } from "react";
+import "react-datepicker/dist/react-datepicker.css";
 
 const NewForm = (props) => {
+  const [startDate, setStartDate] = useState(new Date());
+
+  const restaurantOptions = [
+    { value: "ocd", label: "OCD" },
+    { value: "taizu", label: "Taizu" },
+    { value: "vitrina", label: "Vitrina" },
+  ];
+
   return (
     <>
+      <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"></div>
+
       <div
         id="authentication-modal"
         tabindex="-1"
@@ -34,30 +49,20 @@ const NewForm = (props) => {
             </button>
             <div class="px-6 py-6 lg:px-8">
               <h3 class="mb-4 text-xl font-medium text-gray-900 dark:text-white">
-                Sign in to our platform
+                Wait Less!
               </h3>
-              <div class="flex justify-center">
-                <div>
-                  <label
-                    class="inline-block pl-[0.15rem] hover:cursor-pointer"
-                    for="flexSwitchCheckDefault"
-                  >
-                    Sell Reservation
-                  </label>
-                  <input
-                    class="mt-[0.3rem] mr-2 h-3.5 w-8 appearance-none rounded-[0.4375rem] bg-[rgba(0,0,0,0.25)] outline-none before:pointer-events-none before:absolute before:h-3.5 before:w-3.5 before:rounded-full before:bg-transparent before:content-[''] after:absolute after:z-[2] after:-mt-[0.1875rem] after:h-5 after:w-5 after:rounded-full after:border-none after:bg-white after:shadow-[0_0px_3px_0_rgb(0_0_0_/_7%),_0_2px_2px_0_rgb(0_0_0_/_4%)] after:transition-[background-color_0.2s,transform_0.2s] after:content-[''] checked:bg-primary checked:after:absolute checked:after:z-[2] checked:after:-mt-[3px] checked:after:ml-[1.0625rem] checked:after:h-5 checked:after:w-5 checked:after:rounded-full checked:after:border-none checked:after:bg-primary checked:after:shadow-[0_3px_1px_-2px_rgba(0,0,0,0.2),_0_2px_2px_0_rgba(0,0,0,0.14),_0_1px_5px_0_rgba(0,0,0,0.12)] checked:after:transition-[background-color_0.2s,transform_0.2s] checked:after:content-[''] hover:cursor-pointer focus:before:scale-100 focus:before:opacity-[0.12] focus:before:shadow-[3px_-1px_0px_13px_rgba(0,0,0,0.6)] focus:before:transition-[box-shadow_0.2s,transform_0.2s] focus:after:absolute focus:after:z-[1] focus:after:block focus:after:h-5 focus:after:w-5 focus:after:rounded-full focus:after:content-[''] checked:focus:border-primary checked:focus:bg-primary checked:focus:before:ml-[1.0625rem] checked:focus:before:scale-100 checked:focus:before:shadow-[3px_-1px_0px_13px_#3b71ca] checked:focus:before:transition-[box-shadow_0.2s,transform_0.2s]"
-                    type="checkbox"
-                    role="switch"
-                    id="flexSwitchCheckDefault"
-                  />
-                  <label
-                    class="inline-block pl-[0.15rem] hover:cursor-pointer"
-                    for="flexSwitchCheckDefault"
-                  >
-                    Buy Reservation
-                  </label>
-                </div>
-              </div>
+              <label
+                for="Toggle3"
+                class="inline-flex items-center p-2 rounded-md cursor-pointer dark:text-gray-800"
+              >
+                <input id="Toggle3" type="checkbox" class="hidden peer" />
+                <span class="px-4 py-2 rounded-l-md dark:bg-violet-400 peer-checked:dark:bg-gray-300">
+                  Sell a Reservation
+                </span>
+                <span class="px-4 py-2 rounded-r-md dark:bg-gray-300 peer-checked:dark:bg-violet-400">
+                  Ask For a Reservation
+                </span>
+              </label>
 
               <form class="space-y-6" action="#">
                 <div>
@@ -65,15 +70,13 @@ const NewForm = (props) => {
                     for="email"
                     class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                   >
-                    Your email
+                    Choose Restaurant
                   </label>
-                  <input
-                    type="email"
-                    name="email"
-                    id="email"
-                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
-                    placeholder="name@company.com"
-                    required
+                  {/* need AsyncSelect? */}
+                  <Select
+                    isSearchable={true}
+                    options={restaurantOptions}
+                    name="Restaurant"
                   />
                 </div>
                 <div>
@@ -81,15 +84,11 @@ const NewForm = (props) => {
                     for="password"
                     class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                   >
-                    Your password
+                    Select Date
                   </label>
-                  <input
-                    type="password"
-                    name="password"
-                    id="password"
-                    placeholder="••••••••"
-                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
-                    required
+                  <DatePicker
+                    selected={startDate}
+                    onChange={(date) => setStartDate(date)}
                   />
                 </div>
                 <div class="flex justify-between">
