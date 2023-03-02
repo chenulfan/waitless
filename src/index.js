@@ -10,7 +10,12 @@ import { Notifications } from "react-push-notification";
 
 const router = createBrowserRouter([
   {
-    path: "/",
+    path: "/LOGIN",
+    element: <Login />,
+    
+  },
+  {
+    path: "/home",
     element: <Home />,
   },
   {
@@ -20,13 +25,13 @@ const router = createBrowserRouter([
   {
     path: "/register",
     element: <Register />,
-  },
+  }
 ]);
 
 ReactDOM.createRoot(document.getElementById("root")).render(
-  <React.StrictMode>
+  <React.Suspense>
     <Notifications />
     <Header />
     <RouterProvider router={router} />
-  </React.StrictMode>
+  </React.Suspense>
 );
