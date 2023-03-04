@@ -56,7 +56,7 @@ const Home = () => {
             handleInputChangeCB={onChangeSearchInput}
           />
         </div>
-        <div className="flex-initial w-64 ml-4">
+        <div className="flex-initial w-64 ml-4 mt-7">
           <Select
             isSearchable={true}
             onChange={(value) => {
@@ -64,8 +64,7 @@ const Home = () => {
             }}
             isMulti
             name="categories"
-            options={REST_CAT}
-            className=""
+            options={REST_CAT}            
           />
         </div>
         <button
