@@ -1,4 +1,3 @@
-import React from 'react'
 import Tag from './tag'
 
 const Card = ({ img, imgAlt, title, content, tags }) => {
