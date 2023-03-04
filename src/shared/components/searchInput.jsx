@@ -1,6 +1,6 @@
 import React from 'react'
 
-const SearchInput = ({label, placeholder, handleInputCahngeCB}) => {
+const SearchInput = ({label, placeholder, handleInputChangeCB}) => {
 
     return (
         <div>
@@ -17,7 +17,7 @@ const SearchInput = ({label, placeholder, handleInputCahngeCB}) => {
                     placeholder={placeholder}
                     className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg
                         focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-                    onChange={e => handleInputCahngeCB(e.target.value)}
+                    onChange={e => handleInputChangeCB(e.target.value)}
                 />
             </div>  
         </div>
