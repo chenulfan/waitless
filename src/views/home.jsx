@@ -4,37 +4,39 @@ import SearchInput from "../shared/components/searchInput";
 import axios from "axios";
 import NewForm from "../shared/components/NewForm";
 import addSvg from "../shared/svgs/add";
-
-const DUMMY_DATA = {
-  img: "https://v1.tailwindcss.com/img/card-top.jpg",
-  imgAlt: "My alt",
-  title: "my title",
-  content: "my content",
-  tags: ["tag1", "tag2", "tag3"],
-};
-
-const DUMMY_ARR = Array(20).fill(DUMMY_DATA);
+import Select from "react-select";
+import { DUMMY_ARR, REST_CAT } from "../shared/constants";
 
 const Home = () => {
-  const [searchInput, setSearchInput] = useState("");
   const [currRestaurantArray, setCurrRestaurantArray] = useState(DUMMY_ARR);
+  const [searchValue, setSearchValue] = useState("");
   const [showModal, setShowModal] = useState(false);
+  const [selectedCategories, setSelectedCategories] = useState([]);
 
-  useEffect(() => {
-    axios
-      .get("https://restaurant-api.dicoding.dev/list")
-      .then((res) => console.log(res.data.restaurants));
-  }, []);
+  // useEffect(() => {
+  //   axios
+  //     .get("https://restaurant-api.dicoding.dev/list")
+  //     .then((res) => console.log(res.data.restaurants));
+  // }, []);
 
   const onChangeSearchInput = (inputValue) => {
     inputValue = inputValue.toLowerCase();
-    setSearchInput(inputValue);
-    console.log(inputValue);
-    const filtered = DUMMY_ARR.filter((item) =>
-      item.title.toLowerCase().includes(inputValue)
-    );
-    setCurrRestaurantArray(filtered);
+    setSearchValue(inputValue);
   };
+
+  useEffect(() => {
+    const filtered = DUMMY_ARR.filter((item) => {
+      const matchesSearch = item.title
+        .toLowerCase()
+        .includes(searchValue.toLowerCase());
+
+      const matchesCategories = selectedCategories.every((category) =>
+        item.tags.includes(category.value)
+      );
+      return matchesSearch && matchesCategories;
+    });
+    setCurrRestaurantArray(filtered);
+  }, [selectedCategories, searchValue]);
 
   const handleShowModal = () => {
     setShowModal(true);
@@ -54,6 +56,18 @@ const Home = () => {
             handleInputChangeCB={onChangeSearchInput}
           />
         </div>
+        <div className="flex-initial w-64 ml-4">
+          <Select
+            isSearchable={true}
+            onChange={(value) => {
+              setSelectedCategories(value);
+            }}
+            isMulti
+            name="categories"
+            options={REST_CAT}
+            className=""
+          />
+        </div>
         <button
           onClick={handleShowModal}
           data-modal-target="authentication-modal"
@@ -70,11 +84,11 @@ const Home = () => {
         {currRestaurantArray.map((x) => {
           return (
             <Card
-              img={DUMMY_DATA.img}
-              imgAlt={DUMMY_DATA.imgAlt}
-              title={DUMMY_DATA.title}
-              content={DUMMY_DATA.content}
-              tags={DUMMY_DATA.tags}
+              img={x.img}
+              imgAlt={x.imgAlt}
+              title={x.title}
+              content={x.content}
+              tags={x.tags}
             />
           );
         })}
