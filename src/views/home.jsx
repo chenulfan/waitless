@@ -1,16 +1,9 @@
-import axios from 'axios';
-import { useEffect } from 'react';
-import { useState } from "react";
+import { useEffect, useState } from 'react';
 import Card from '../shared/components/card';
 import SearchInput from "../shared/components/searchInput";
 import axios from "axios";
-import { useEffect } from "react";
-import { useState } from "react";
-import { Button } from "../shared/components/button";
-import Card from "../shared/components/card";
-import SearchInput from "../shared/components/searchInput";
 import NewForm from "../shared/components/NewForm";
-
+import addSvg from '../shared/svgs/add';
 const Home = () => {
 
   const [restaurantFilter, setRestaurantFilter] = useState('');
@@ -43,6 +36,8 @@ const Home = () => {
 
   const DUMMY_ARR = Array(20).fill(DUMMY_DATA)
 
+
+  
   return (
     <div>
       <button
@@ -52,13 +47,7 @@ const Home = () => {
         className="bg-blue-500 hover:bg-blue-400 text-white font-bold py-2 px-4 border-b-4 border-blue-700 hover:border-blue-500 rounded-full"
         type="button"
       >
-        <svg viewBox="0 0 20 20" fill="currentColor" className="w-6 h-6">
-          <path
-            fillRule="evenodd"
-            d="M11 9V6a1 1 0 00-2 0v3H6a1 1 0 000 2h3v3a1 1 0 102 0v-3h3a1 1 0 100-2h-3z"
-            clipRule="evenodd"
-          />
-        </svg>
+        {addSvg}
       </button>
   
       {showModal && <NewForm handleCloseModal={handleCloseModal} />}
