@@ -19,9 +19,6 @@ const Home = () => {
   //     .then((res) => console.log(res.data.restaurants));
   // }, []);
 
-
-
-
   const onChangeSearchInput = (inputValue) => {
     inputValue = inputValue.toLowerCase();
     setSearchValue(inputValue);
@@ -68,8 +65,7 @@ const Home = () => {
             isMulti
             name="categories"
             placeholder="Select Categories"
-
-            options={REST_CAT}            
+            options={REST_CAT}
           />
         </div>
         <button
