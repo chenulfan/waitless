@@ -19,6 +19,9 @@ const Home = () => {
   //     .then((res) => console.log(res.data.restaurants));
   // }, []);
 
+
+
+
   const onChangeSearchInput = (inputValue) => {
     inputValue = inputValue.toLowerCase();
     setSearchValue(inputValue);
@@ -52,7 +55,7 @@ const Home = () => {
         <div className="flex-initial w-64 ml-4">
           <SearchInput
             label="MY LABEL"
-            placeholder="MY PLACE HOLDER"
+            placeholder="Search For a Restaurant"
             handleInputChangeCB={onChangeSearchInput}
           />
         </div>
@@ -64,6 +67,8 @@ const Home = () => {
             }}
             isMulti
             name="categories"
+            placeholder="Select Categories"
+
             options={REST_CAT}            
           />
         </div>
