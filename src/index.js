@@ -6,6 +6,7 @@ import Header from "./shared/components/header";
 import Home from "./views/home";
 import Login from "./views/login";
 import Register from "./views/register";
+import Profile from "./views/profile";
 import { PageNotFound } from "./views/PageNotFound";
 import { Notifications } from "react-push-notification";
 
@@ -25,6 +26,10 @@ const router = createBrowserRouter([
   {
     path: "/register",
     element: <Register />,
+  },
+  {
+    path: "/profile",
+    element: <Profile />,
   },
   {
     path: "*",

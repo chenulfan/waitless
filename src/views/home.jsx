@@ -13,12 +13,6 @@ const Home = () => {
   const [showModal, setShowModal] = useState(false);
   const [selectedCategories, setSelectedCategories] = useState([]);
 
-  // useEffect(() => {
-  //   axios
-  //     .get("https://restaurant-api.dicoding.dev/list")
-  //     .then((res) => console.log(res.data.restaurants));
-  // }, []);
-
   const onChangeSearchInput = (inputValue) => {
     inputValue = inputValue.toLowerCase();
     setSearchValue(inputValue);

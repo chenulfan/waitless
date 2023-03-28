@@ -1,18 +1,39 @@
 import { Button } from "../shared/components/button";
 import { useFormik } from "formik";
 import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
 
 const Register = () => {
   const navigate = useNavigate();
 
+  const registerUser = async (userData) => {
+    try {
+      const response = await axios.post(
+        "http://localhost:3030/auth/register",
+        userData
+      );
+      return response.data;
+    } catch (error) {
+      console.error("Error registering user:", error);
+      return null;
+    }
+  };
+
   const formik = useFormik({
     initialValues: {
+      fullname: "",
+      username: "",
       email: "",
       password: "",
     },
-    onSubmit: (values) => {
-      alert(JSON.stringify(values, null, 2));
-      navigate("/");
+    onSubmit: async (values) => {
+      const result = await registerUser(values);
+      if (result) {
+        alert("User registered successfully");
+        navigate("/");
+      } else {
+        alert("Error registering user");
+      }
     },
   });
 
@@ -33,6 +54,30 @@ const Register = () => {
               <form onSubmit={formik.handleSubmit}>
                 <div className="mb-6">
                   <input
+                    type="text"
+                    id="fullname"
+                    name="fullname"
+                    onChange={formik.handleChange}
+                    value={formik.values.fullname}
+                    placeholder="Full Name"
+                    className="form-control block w-full px-4 py-2 text-xl font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
+                  />
+                </div>
+
+                <div className="mb-6">
+                  <input
+                    type="text"
+                    id="username"
+                    name="username"
+                    onChange={formik.handleChange}
+                    value={formik.values.username}
+                    placeholder="Username"
+                    className="form-control block w-full px-4 py-2 text-xl font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
+                  />
+                </div>
+
+                <div className="mb-6">
+                  <input
                     type="email"
                     id="email"
                     name="email"
@@ -42,7 +87,6 @@ const Register = () => {
                     className="form-control block w-full px-4 py-2 text-xl font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
                   />
                 </div>
-
                 <div className="mb-6">
                   <input
                     type="password"
