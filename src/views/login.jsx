@@ -1,18 +1,24 @@
-import { Button } from "../shared/components/button";
 import { useFormik } from "formik";
-import { Link, Navigate, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { loginUser } from "../utils/api";
+import { useAuth } from "../utils/AuthContext";
 
 const Login = () => {
-  const navigate = useNavigate();
+  const { setCurrentUser } = useAuth();
 
   const formik = useFormik({
     initialValues: {
-      email: "",
+      username: "",
       password: "",
     },
-    onSubmit: (values) => {
-      alert(JSON.stringify(values, null, 2));
-      navigate("/");
+    onSubmit: async (values) => {
+      try {
+        const userData = await loginUser(values.username, values.password);
+        setCurrentUser(userData.user);
+        window.location.href = "/home";
+      } catch (error) {
+        alert(error.message);
+      }
     },
   });
 
@@ -33,12 +39,12 @@ const Login = () => {
               <form onSubmit={formik.handleSubmit}>
                 <div className="mb-6">
                   <input
-                    type="email"
-                    id="email"
-                    name="email"
+                    type="username"
+                    id="username"
+                    name="username"
                     onChange={formik.handleChange}
-                    value={formik.values.email}
-                    placeholder="Email address"
+                    value={formik.values.username}
+                    placeholder="Username"
                     className="form-control block w-full px-4 py-2 text-xl font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
                   />
                 </div>
