@@ -6,12 +6,24 @@ import NewForm from "../shared/components/NewForm";
 import addSvg from "../shared/svgs/add";
 import Select from "react-select";
 import { DUMMY_ARR, REST_CAT } from "../shared/constants";
+import { useAuth } from "../utils/AuthContext";
 
 const Home = () => {
   const [currRestaurantArray, setCurrRestaurantArray] = useState(DUMMY_ARR);
   const [searchValue, setSearchValue] = useState("");
   const [showModal, setShowModal] = useState(false);
   const [selectedCategories, setSelectedCategories] = useState([]);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  const { currentUser, logout } = useAuth();
+
+  useEffect(() => {
+    if (currentUser) {
+      setIsLoggedIn(true);
+    } else {
+      setIsLoggedIn(false);
+    }
+  }, [currentUser]);
 
   const onChangeSearchInput = (inputValue) => {
     inputValue = inputValue.toLowerCase();
@@ -72,7 +84,13 @@ const Home = () => {
           {addSvg}
         </button>
 
-        {showModal && <NewForm handleCloseModal={handleCloseModal} />}
+        {showModal && (
+          <NewForm
+            handleCloseModal={handleCloseModal}
+            isLoggedIn={isLoggedIn}
+            currentUser={currentUser}
+          />
+        )}
       </div>
       <div className="flex justify-between flex-wrap">
         {currRestaurantArray.map((x) => {

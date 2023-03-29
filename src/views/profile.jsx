@@ -2,6 +2,7 @@ import React from "react";
 import { useState, useEffect } from "react";
 import { useAuth } from "../utils/AuthContext";
 import axios from "axios";
+
 const Profile = () => {
   const [userData, setUserData] = useState(null);
 
@@ -193,11 +194,9 @@ const Profile = () => {
                 </div>
 
                 <div className="grid grid-cols-2">
-                  <div className="px-4 py-2 font-semibold">Email.</div>
+                  <div className="px-4 py-2 font-semibold">Email</div>
                   <div className="px-4 py-2">
-                    <a className="text-blue-800" href="mailto:jane@example.com">
-                      {userData ? userData.email : "Loading..."}
-                    </a>
+                    {userData ? userData.email : "Loading..."}
                   </div>
                 </div>
                 <div className="grid grid-cols-2">
