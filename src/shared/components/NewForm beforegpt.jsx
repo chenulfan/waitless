@@ -1,15 +1,20 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import Select from "react-select";
+import AsyncSelect from "react-select/async";
 import DatePicker from "react-datepicker";
-import { useFormik } from "formik";
-import * as Yup from "yup";
+import { useState } from "react";
 import "react-datepicker/dist/react-datepicker.css";
 import { Link } from "react-router-dom";
 import axios from "axios";
 
 const NewForm = (props) => {
   const [startDate, setStartDate] = useState(new Date());
+  const [price, setPrice] = useState(0);
+  const [isSelling, setIsSelling] = useState(true);
+  const [restaurant, setRestaurant] = useState(undefined);
+  const [numOfGuests, setNumOfGuests] = useState(0);
   const [restaurantOptions, setRestaurantOptions] = useState([]);
+  const [isClicked, setIsClicked] = useState(false);
 
   useEffect(() => {
     const formattedRestaurants = props.restaurants.map((restaurant) => ({
@@ -19,43 +24,20 @@ const NewForm = (props) => {
     setRestaurantOptions(formattedRestaurants);
   }, [props.restaurants]);
 
-  const formik = useFormik({
-    initialValues: {
-      type: null,
-      restaurant: "",
-      guests: "",
+  const handleSubmit = async (event) => {
+    const reservationData = {
+      owner: props.currentUser.userId,
+      type: isSelling ? "offer" : "request",
+      restaurant: restaurant,
+      guests: numOfGuests,
       date: startDate,
-      price: "",
-    },
-    validationSchema: Yup.object({
-      type: Yup.string().required("Please select either Sell or Ask"),
-      restaurant: Yup.string().required("Please choose a restaurant"),
-      guests: Yup.number()
-        .required("Please set the number of guests")
-        .positive("Number of guests must be a positive number")
-        .integer("Number of guests must be a number"),
-      date: Yup.date().required("Please select a date"),
-      price: Yup.number()
-        .required("Please set your price")
-        .moreThan(-1, "Price can not be negative"),
-    }),
-    onSubmit: async (values) => {
-      const reservationData = {
-        owner: props.currentUser.userId,
-        type: values.type,
-        restaurant: values.restaurant,
-        guests: values.guests,
-        date: values.date,
-        price: values.price,
-        confirmationCode: "123456",
-      };
-      console.log(reservationData);
-      await submitReservation(reservationData);
+      price: price,
+      confirmationCode: "123456",
+    };
+    await submitReservation(reservationData);
 
-      alert("Your request has been submitted!");
-      window.location.reload();
-    },
-  });
+    alert("Your request has been submitted!");
+  };
 
   const submitReservation = async (reservationData) => {
     try {
@@ -75,6 +57,16 @@ const NewForm = (props) => {
     }
   };
 
+  const handleToggleAsk = () => {
+    setIsSelling(false);
+    setIsClicked(true);
+  };
+
+  const handleToggleSell = () => {
+    setIsSelling(true);
+    setIsClicked(true);
+  };
+
   const renderLoggedInContent = () => {
     return (
       <>
@@ -86,9 +78,8 @@ const NewForm = (props) => {
           class="fixed top-0 left-0 right-0 z-50  w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-modal md:h-full"
         >
           <div
-            class="relative w-full h-auto max-w-md"
+            class="relative w-full h-full max-w-md md:h-auto"
             style={{
-              position: "fixed",
               top: "50%",
               left: "50%",
               transform: "translate(-50%, -50%)",
@@ -121,20 +112,20 @@ const NewForm = (props) => {
                   Wait Less!
                 </h3>
 
-                <form class="space-y-6" onSubmit={formik.handleSubmit}>
+                <form class="space-y-6" onSubmit={handleSubmit}>
                   <ul class="grid w-full gap-6 md:grid-cols-2">
                     <li>
                       <input
                         type="radio"
-                        id="type-offer"
-                        name="type"
-                        value="offer"
+                        id="hosting-small"
+                        name="hosting"
+                        value="hosting-small"
                         class="hidden peer"
-                        checked={formik.values.type === "offer"}
-                        onChange={formik.handleChange}
+                        require
+                        onClick={handleToggleSell}
                       />
                       <label
-                        htmlFor="type-offer"
+                        for="hosting-small"
                         class="inline-flex items-center justify-between w-full p-5 text-gray-500 bg-white border border-gray-200 rounded-lg cursor-pointer dark:hover:text-gray-300 dark:border-gray-700 dark:peer-checked:text-blue-500 peer-checked:border-blue-600 peer-checked:text-blue-600 hover:text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:bg-gray-800 dark:hover:bg-gray-700"
                       >
                         <div class="block">
@@ -160,16 +151,14 @@ const NewForm = (props) => {
                     <li>
                       <input
                         type="radio"
-                        id="type-request"
-                        name="type"
-                        value="request"
+                        id="hosting-big"
+                        name="hosting"
+                        value="hosting-big"
                         class="hidden peer"
-                        checked={formik.values.type === "request"}
-                        onChange={formik.handleChange}
+                        onClick={handleToggleAsk}
                       />
-
                       <label
-                        htmlFor="type-request"
+                        for="hosting-big"
                         class="inline-flex items-center justify-between w-full p-5 text-gray-500 bg-white border border-gray-200 rounded-lg cursor-pointer dark:hover:text-gray-300 dark:border-gray-700 dark:peer-checked:text-blue-500 peer-checked:border-blue-600 peer-checked:text-blue-600 hover:text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:bg-gray-800 dark:hover:bg-gray-700"
                       >
                         <div class="block">
@@ -193,14 +182,9 @@ const NewForm = (props) => {
                       </label>
                     </li>
                   </ul>
-                  {formik.touched.type && formik.errors.type ? (
-                    <div class="text-red-500 text-sm -mb-8">
-                      {formik.errors.type}
-                    </div>
-                  ) : null}
                   <div>
                     <label
-                      htmlFor="restaurant"
+                      for="restaurant"
                       class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                     >
                       Choose Restaurant
@@ -208,64 +192,44 @@ const NewForm = (props) => {
                     <Select
                       isSearchable={true}
                       options={restaurantOptions}
-                      name="restaurant"
-                      id="restaurant"
-                      value={restaurantOptions.find(
-                        (option) => option.value === formik.values.restaurant
-                      )}
+                      name="select"
+                      id="select"
                       onChange={(value) => {
-                        formik.setFieldValue("restaurant", value.value);
+                        setRestaurant(value.value);
                       }}
                     />
-                    {formik.touched.restaurant && formik.errors.restaurant ? (
-                      <div className="text-red-500 text-sm">
-                        {formik.errors.restaurant}
-                      </div>
-                    ) : null}
                   </div>
                   <div>
                     <label
-                      htmlFor="date"
+                      for="date"
                       class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                     >
                       Select Date
                     </label>
                     <DatePicker
-                      selected={formik.values.date}
-                      onChange={(date) => {
-                        formik.setFieldValue("date", date);
-                      }}
+                      selected={startDate}
+                      onChange={(date) => setStartDate(date)}
                     />
-                    {formik.touched.date && formik.errors.date ? (
-                      <div className="text-red-500 text-sm">
-                        {formik.errors.date}
-                      </div>
-                    ) : null}
                   </div>
                   <div>
                     <label
-                      htmlFor="guests"
+                      for="date"
                       class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                     >
                       Set Number of Guests
                     </label>
                     <input
                       type="number"
-                      id="guests"
-                      name="guests"
-                      value={formik.values.guests}
-                      onChange={formik.handleChange}
-                      onBlur={formik.handleBlur}
+                      id="price"
+                      name="price"
+                      onChange={(event) => {
+                        setNumOfGuests(event.target.value);
+                      }}
                     />
-                    {formik.touched.guests && formik.errors.guests ? (
-                      <div className="text-red-500 text-sm">
-                        {formik.errors.guests}
-                      </div>
-                    ) : null}
                   </div>
                   <div>
                     <label
-                      htmlFor="price"
+                      for="date"
                       class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                     >
                       Set Your Price
@@ -274,16 +238,12 @@ const NewForm = (props) => {
                       type="number"
                       id="price"
                       name="price"
-                      value={formik.values.price}
-                      onChange={formik.handleChange}
-                      onBlur={formik.handleBlur}
+                      onChange={(event) => {
+                        setPrice(event.target.value);
+                      }}
                     />
-                    {formik.touched.price && formik.errors.price ? (
-                      <div className="text-red-500 text-sm">
-                        {formik.errors.price}
-                      </div>
-                    ) : null}
-                  </div>{" "}
+                  </div>
+
                   <button
                     type="submit"
                     class="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
@@ -310,9 +270,8 @@ const NewForm = (props) => {
           class="fixed top-0 left-0 right-0 z-50  w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-modal md:h-full"
         >
           <div
-            class="relative w-full h-auto max-w-md"
+            class="relative w-full h-full max-w-md md:h-auto"
             style={{
-              position: "fixed",
               top: "50%",
               left: "50%",
               transform: "translate(-50%, -50%)",
@@ -377,9 +336,7 @@ const NewForm = (props) => {
   };
 
   return (
-    <div>
-      {props.currentUser ? renderLoggedInContent() : renderLoggedOutContent()}
-    </div>
+    <>{props.isLoggedIn ? renderLoggedInContent() : renderLoggedOutContent()}</>
   );
 };
 

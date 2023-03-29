@@ -14,8 +14,28 @@ const Home = () => {
   const [showModal, setShowModal] = useState(false);
   const [selectedCategories, setSelectedCategories] = useState([]);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [restaurants, setRestaurants] = useState([]);
 
   const { currentUser, logout } = useAuth();
+
+  const fetchRestaurants = async () => {
+    try {
+      const response = await axios.get(
+        "http://localhost:3030/api/restaurants",
+        {
+          withCredentials: true,
+        }
+      );
+      setRestaurants(response.data);
+      console.log(response.data);
+    } catch (error) {
+      console.error("Error fetching restaurants:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchRestaurants();
+  }, []);
 
   useEffect(() => {
     if (currentUser) {
@@ -89,6 +109,7 @@ const Home = () => {
             handleCloseModal={handleCloseModal}
             isLoggedIn={isLoggedIn}
             currentUser={currentUser}
+            restaurants={restaurants}
           />
         )}
       </div>
