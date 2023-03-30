@@ -9,6 +9,7 @@ import axios from "axios";
 
 const NewForm = (props) => {
   const [startDate, setStartDate] = useState(new Date());
+  const [startTime, setStartTime] = useState("12:00");
   const [restaurantOptions, setRestaurantOptions] = useState([]);
 
   useEffect(() => {
@@ -34,12 +35,17 @@ const NewForm = (props) => {
         .required("Please set the number of guests")
         .positive("Number of guests must be a positive number")
         .integer("Number of guests must be a number"),
-      date: Yup.date().required("Please select a date"),
+      date: Yup.date()
+        .min(new Date(), "Date must be later than today")
+        .required("Please select a date"),
+      time: Yup.string().required("Please select a time"),
       price: Yup.number()
         .required("Please set your price")
         .moreThan(-1, "Price can not be negative"),
     }),
     onSubmit: async (values) => {
+      const [hours, minutes] = values.time.split(":");
+      values.date.setHours(hours, minutes);
       const reservationData = {
         owner: props.currentUser.userId,
         type: values.type,
@@ -239,6 +245,27 @@ const NewForm = (props) => {
                     {formik.touched.date && formik.errors.date ? (
                       <div className="text-red-500 text-sm">
                         {formik.errors.date}
+                      </div>
+                    ) : null}
+                  </div>
+                  <div>
+                    <label
+                      htmlFor="time"
+                      class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                    >
+                      Select Time
+                    </label>
+                    <input
+                      type="time"
+                      id="time"
+                      name="time"
+                      value={formik.values.time}
+                      onChange={formik.handleChange}
+                      onBlur={formik.handleBlur}
+                    />
+                    {formik.touched.time && formik.errors.time ? (
+                      <div className="text-red-500 text-sm">
+                        {formik.errors.time}
                       </div>
                     ) : null}
                   </div>

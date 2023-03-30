@@ -87,13 +87,17 @@ const HistoryAccordion = (props) => {
                   </span>
                   <span className="tracking-wide">Past Requests</span>
                 </div>
-                <ul className="list-inside space-y-2">
-                  {activeRequests.map((reservation) => (
-                    <li key={reservation._id}>
-                      {renderReservationItem(reservation)}
-                    </li>
-                  ))}
-                </ul>
+                {activeRequests.length > 0 ? (
+                  <ul className="list-inside space-y-2">
+                    {activeRequests.map((reservation) => (
+                      <li key={reservation._id}>
+                        {renderReservationItem(reservation)}
+                      </li>
+                    ))}
+                  </ul>
+                ) : (
+                  <p>No Active Requests</p>
+                )}
               </div>
               <div>
                 <div className="flex items-center space-x-2 font-semibold text-gray-900 leading-8 mb-3">
@@ -120,13 +124,17 @@ const HistoryAccordion = (props) => {
                   </span>
                   <span className="tracking-wide">Past Offers</span>
                 </div>
-                <ul className="list-inside space-y-2">
-                  {activeOffers.map((reservation) => (
-                    <li key={reservation._id}>
-                      {renderReservationItem(reservation)}
-                    </li>
-                  ))}
-                </ul>
+                {activeOffers.length > 0 ? (
+                  <ul className="list-inside space-y-2">
+                    {activeOffers.map((reservation) => (
+                      <li key={reservation._id}>
+                        {renderReservationItem(reservation)}
+                      </li>
+                    ))}
+                  </ul>
+                ) : (
+                  <p>No Active Offers</p>
+                )}
               </div>
             </div>
           </div>
