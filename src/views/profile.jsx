@@ -2,6 +2,24 @@ import React from "react";
 import { useState, useEffect } from "react";
 import { useAuth } from "../utils/AuthContext";
 import axios from "axios";
+import HistoryAccordion from "../shared/components/HistoryAccordion";
+
+function Icon({ id, open }) {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      className={`${
+        id === open ? "rotate-180" : ""
+      } h-5 w-5 transition-transform`}
+      fill="none"
+      viewBox="0 0 24 24"
+      stroke="currentColor"
+      strokeWidth={2}
+    >
+      <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+    </svg>
+  );
+}
 
 const Profile = () => {
   const [userData, setUserData] = useState(null);
@@ -23,7 +41,7 @@ const Profile = () => {
   const fetchUserReservations = async (userId) => {
     try {
       const response = await axios.get(
-        `http://localhost:3030/api/reservations/${userId}`,
+        `http://localhost:3030/api/reservations/user/${userId}`,
         { withCredentials: true }
       );
       setUserReservations(response.data);
@@ -42,14 +60,40 @@ const Profile = () => {
     }
   }, [currentUser]);
 
-  const handleClick = () => {
-    console.log(currentUser);
+  const renderReservationItem = (reservation) => {
+    const date = new Date(reservation.date);
+    const formattedDate = date.toLocaleString("en-GB");
+    return (
+      <>
+        <div className="text-teal-600">{reservation.restaurant.name}</div>
+        <div className="text-gray-500 text-xs">{formattedDate}</div>
+      </>
+    );
   };
+
+  const filterReservationByDate = (reservation) => {
+    const today = new Date();
+    const reservationDate = new Date(reservation.date);
+    return reservationDate >= today;
+  };
+
+  // Filter active requests
+  const activeRequests = userReservations.filter(
+    (reservation) =>
+      reservation.type === "request" && filterReservationByDate(reservation)
+    //add active status to db instead of filtering by date
+  );
+
+  // Filter active offers
+  const activeOffers = userReservations.filter(
+    (reservation) =>
+      reservation.type === "offer" && filterReservationByDate(reservation)
+    //add active status to db instead of filtering by date
+  );
 
   return (
     <div className="container mx-auto my-5 p-5">
       {" "}
-      <button onClick={handleClick}>GetUserInfo</button>
       <div className="md:flex no-wrap md:-mx-2 ">
         {/* <!-- Left Side --> */}
         <div className="w-full md:w-3/12 md:mx-2">
@@ -68,95 +112,13 @@ const Profile = () => {
             <h3 className="text-gray-600 font-lg text-semibold leading-6">
               Welcome to your profile!
             </h3>
-            <p className=" text-sm text-gray-500 hover:text-gray-600 leading-6">
-              Lorem ipsum dolor sit amet consectetur adipisicing elit.
-              Reprehenderit, eligendi dolorum sequi illum qui unde aspernatur
-              non deserunt
+            <p className=" text-sm text-gray-500 hover:text-gray-600 leading-6 mt-1">
+              Here you can view active reservation offers/requests, as well as
+              your history of your reservations.
             </p>
-            <ul className="bg-gray-100 text-gray-600 hover:text-gray-700 hover:shadow py-2 px-3 mt-3 divide-y rounded shadow-sm">
-              <li className="flex items-center py-3">
-                <span>Status</span>
-                <span className="ml-auto">
-                  <span className="bg-green-500 py-1 px-2 rounded text-white text-sm">
-                    Active
-                  </span>
-                </span>
-              </li>
-              <li className="flex items-center py-3">
-                <span>Member since</span>
-                <span className="ml-auto">
-                  {userData ? userData.analytics : "Loading..."}
-                </span>
-              </li>
-            </ul>
           </div>
           {/* <!-- End of profile card --> */}
           <div className="my-4"></div>
-          {/* <!-- Friends card --> */}
-          <div className="bg-white p-3 hover:shadow">
-            <div className="flex items-center space-x-3 font-semibold text-gray-900 text-xl leading-8">
-              <span className="text-green-500">
-                <svg
-                  className="h-5 fill-current"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"
-                  />
-                </svg>
-              </span>
-              <span>Similar Profiles</span>
-            </div>
-            <div className="grid grid-cols-3">
-              <div className="text-center my-2">
-                <img
-                  className="h-16 w-16 rounded-full mx-auto"
-                  //src="https://cdn.australianageingagenda.com.au/wp-content/uploads/2015/06/28085920/Phil-Beckett-2-e1435107243361.jpg"
-                  alt=""
-                />
-                <a href="#" className="text-main-color">
-                  Kojstantin
-                </a>
-              </div>
-              <div className="text-center my-2">
-                <img
-                  className="h-16 w-16 rounded-full mx-auto"
-                  //src="https://avatars2.githubusercontent.com/u/24622175?s=60&amp;v=4"
-                  alt=""
-                />
-                <a href="#" className="text-main-color">
-                  James
-                </a>
-              </div>
-              <div className="text-center my-2">
-                <img
-                  className="h-16 w-16 rounded-full mx-auto"
-                  //src="https://lavinephotography.com.au/wp-content/uploads/2017/01/PROFILE-Photography-112.jpg"
-                  alt=""
-                />
-                <a href="#" className="text-main-color">
-                  Natie
-                </a>
-              </div>
-              <div className="text-center my-2">
-                <img
-                  className="h-16 w-16 rounded-full mx-auto"
-                  //src="https://bucketeer-e05bbc84-baa3-437e-9518-adb32be77984.s3.amazonaws.com/public/images/f04b52da-12f2-449f-b90c-5e4d5e2b1469_361x361.png"
-                  alt=""
-                />
-                <a href="#" className="text-main-color">
-                  Casey
-                </a>
-              </div>
-            </div>
-          </div>
-          {/* <!-- End of friends card --> */}
         </div>
         {/* <!-- Right Side --> */}
         <div className="w-full md:w-9/12 mx-2 h-64">
@@ -226,7 +188,7 @@ const Profile = () => {
 
           <div className="my-4"></div>
 
-          {/* <!-- Experience and education --> */}
+          {/* <!-- Reservations --> */}
           <div className="bg-white p-3 shadow-sm rounded-sm">
             <div className="grid grid-cols-2">
               <div>
@@ -250,14 +212,11 @@ const Profile = () => {
                   <span className="tracking-wide">Active Requests</span>
                 </div>
                 <ul className="list-inside space-y-2">
-                  <li>
-                    <div className="text-teal-600">Restaurant Name</div>
-                    <div className="text-gray-500 text-xs">Date</div>
-                  </li>
-                  <li>
-                    <div className="text-teal-600">Restaurant Name</div>
-                    <div className="text-gray-500 text-xs">Date</div>
-                  </li>
+                  {activeRequests.map((reservation) => (
+                    <li key={reservation._id}>
+                      {renderReservationItem(reservation)}
+                    </li>
+                  ))}
                 </ul>
               </div>
               <div>
@@ -286,19 +245,18 @@ const Profile = () => {
                   <span className="tracking-wide">Active Offers</span>
                 </div>
                 <ul className="list-inside space-y-2">
-                  <li>
-                    <div className="text-teal-600">Restaurant Name</div>
-                    <div className="text-gray-500 text-xs">Date</div>
-                  </li>
-                  <li>
-                    <div className="text-teal-600">Restaurant Name</div>
-                    <div className="text-gray-500 text-xs">Date</div>
-                  </li>
+                  {activeOffers.map((reservation) => (
+                    <li key={reservation._id}>
+                      {renderReservationItem(reservation)}
+                    </li>
+                  ))}
                 </ul>
               </div>
             </div>
-            {/* <!-- End of Experience and education grid --> */}
+
+            <HistoryAccordion userReservations={userReservations} />
           </div>
+          {/* <!-- End of Reservations grid --> */}
           {/* <!-- End of profile tab --> */}
         </div>
       </div>
