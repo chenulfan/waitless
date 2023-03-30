@@ -5,7 +5,7 @@ import axios from "axios";
 
 const Profile = () => {
   const [userData, setUserData] = useState(null);
-
+  const [userReservations, setUserReservations] = useState([]);
   const { currentUser, logout } = useAuth();
 
   const fetchUserData = async (username) => {
@@ -20,9 +20,23 @@ const Profile = () => {
     }
   };
 
+  const fetchUserReservations = async (userId) => {
+    try {
+      const response = await axios.get(
+        `http://localhost:3030/api/reservations/${userId}`,
+        { withCredentials: true }
+      );
+      setUserReservations(response.data);
+      console.log(response.data);
+    } catch (error) {
+      console.error("Error fetching user reservations:", error);
+    }
+  };
+
   useEffect(() => {
     if (currentUser) {
       fetchUserData(currentUser.username);
+      fetchUserReservations(currentUser.userId);
     } else {
       console.error("No logged-in user found");
     }
