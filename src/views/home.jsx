@@ -14,7 +14,7 @@ const Home = () => {
   const [showModal, setShowModal] = useState(false);
   const [selectedCategories, setSelectedCategories] = useState([]);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [restaurants, setRestaurants] = useState([]);
+  const [restaurants, setRestaurants] = useState(DUMMY_ARR);
 
   const { currentUser, logout } = useAuth();
 
@@ -51,8 +51,8 @@ const Home = () => {
   };
 
   useEffect(() => {
-    const filtered = DUMMY_ARR.filter((item) => {
-      const matchesSearch = item.title
+    const filtered = restaurants.filter((item) => {
+      const matchesSearch = item.name
         .toLowerCase()
         .includes(searchValue.toLowerCase());
 
@@ -62,7 +62,21 @@ const Home = () => {
       return matchesSearch && matchesCategories;
     });
     setCurrRestaurantArray(filtered);
-  }, [selectedCategories, searchValue]);
+  }, [selectedCategories, searchValue, restaurants]);
+
+  // useEffect(() => {
+  //   const filtered = DUMMY_ARR.filter((item) => {
+  //     const matchesSearch = item.title
+  //       .toLowerCase()
+  //       .includes(searchValue.toLowerCase());
+
+  //     const matchesCategories = selectedCategories.every((category) =>
+  //       item.tags.includes(category.value)
+  //     );
+  //     return matchesSearch && matchesCategories;
+  //   });
+  //   setCurrRestaurantArray(filtered);
+  // }, [selectedCategories, searchValue]);
 
   const handleShowModal = () => {
     setShowModal(true);
@@ -119,7 +133,7 @@ const Home = () => {
             <Card
               img={x.img}
               imgAlt={x.imgAlt}
-              title={x.title}
+              title={x.name}
               content={x.content}
               tags={x.tags}
             />
