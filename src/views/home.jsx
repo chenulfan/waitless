@@ -134,7 +134,7 @@ const Home = () => {
               img={x.img}
               imgAlt={x.imgAlt}
               title={x.name}
-              content={x.content}
+              description={x.description}
               tags={x.tags}
             />
           );
