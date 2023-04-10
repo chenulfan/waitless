@@ -27,6 +27,7 @@ const NewForm = (props) => {
       guests: "",
       date: startDate,
       price: "",
+      phone: "",
     },
     validationSchema: Yup.object({
       type: Yup.string().required("Please select either Sell or Ask"),
@@ -42,6 +43,12 @@ const NewForm = (props) => {
       price: Yup.number()
         .required("Please set your price")
         .moreThan(-1, "Price can not be negative"),
+      phone: Yup.string()
+        .required("Please enter your phone number")
+        .matches(
+          /^(\+\d{1,2}\s?)?1?\-?\.?\s?\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4}$/,
+          "Please enter a valid phone number"
+        ),
     }),
     onSubmit: async (values) => {
       const [hours, minutes] = values.time.split(":");
@@ -53,6 +60,7 @@ const NewForm = (props) => {
         guests: values.guests,
         date: values.date,
         price: values.price,
+        phone: values.phone,
         confirmationCode: "123456",
       };
       console.log(reservationData);
@@ -266,6 +274,28 @@ const NewForm = (props) => {
                     {formik.touched.time && formik.errors.time ? (
                       <div className="text-red-500 text-sm">
                         {formik.errors.time}
+                      </div>
+                    ) : null}
+                  </div>
+                  <div>
+                    <label
+                      htmlFor="phone"
+                      class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                    >
+                      Phone Number
+                    </label>
+                    <input
+                      type="tel"
+                      id="phone"
+                      name="phone"
+                      value={formik.values.phone}
+                      onChange={formik.handleChange}
+                      onBlur={formik.handleBlur}
+                      pattern="(\+\d{1,2}\s?)?1?\-?\.?\s?\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4}"
+                    />
+                    {formik.touched.phone && formik.errors.phone ? (
+                      <div className="text-red-500 text-sm">
+                        {formik.errors.phone}
                       </div>
                     ) : null}
                   </div>

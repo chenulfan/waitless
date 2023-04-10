@@ -128,14 +128,15 @@ const Home = () => {
         )}
       </div>
       <div className="flex justify-between flex-wrap">
-        {currRestaurantArray.map((x) => {
+        {currRestaurantArray.map((restaurant) => {
           return (
             <Card
-              img={x.img}
-              imgAlt={x.imgAlt}
-              title={x.name}
-              description={x.description}
-              tags={x.tags}
+              img={restaurant.img}
+              imgAlt={restaurant.imgAlt}
+              title={restaurant.name}
+              description={restaurant.description}
+              tags={restaurant.tags}
+              reservations={restaurant.reservations}
             />
           );
         })}
