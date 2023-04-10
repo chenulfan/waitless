@@ -11,6 +11,21 @@ import { PageNotFound } from "./views/PageNotFound";
 import { Notifications } from "react-push-notification";
 import { AuthProvider } from "./utils/AuthContext";
 import { createRoot } from "react-dom/client";
+import { initializeApp } from 'firebase/app';
+import { getAnalytics } from "firebase/analytics";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyBt5dDv-CvLIWUi104LBpbQjHGF1ktzGKE",
+  authDomain: "waitless-2df5f.firebaseapp.com",
+  projectId: "waitless-2df5f",
+  storageBucket: "waitless-2df5f.appspot.com",
+  messagingSenderId: "607472923191",
+  appId: "1:607472923191:web:b805f23404063d50c585b2",
+  measurementId: "G-7FZL47128B"
+};
+
+const app = initializeApp(firebaseConfig);
+const analytics = getAnalytics(app);
 
 createRoot(document.getElementById("root")).render(
   <React.Suspense>
