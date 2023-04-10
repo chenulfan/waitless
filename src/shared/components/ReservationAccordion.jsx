@@ -98,25 +98,26 @@ const ReservationAccordion = (props) => {
     const formattedDate = date.toLocaleString("en-GB").substring(0, 17);
     return (
       <>
-        <div className="text-gray-500 text-xs">{formattedDate}</div>
-        {type === "offer" ? (
-          <>
+        <div className="flex items-center justify-between">
+          <div className="text-gray-500 text-xs">{formattedDate}</div>
+          {type === "offer" ? (
+            <>
+              <button
+                className="bg-blue-500 text-white px-2 py-1 rounded-md"
+                onClick={() => handleBuy(reservation._id)}
+              >
+                Buy
+              </button>
+            </>
+          ) : (
             <button
-              className="bg-blue-500 text-white px-2 py-1 rounded-md ml-2"
-              onClick={() => handleBuy(reservation._id)}
+              className="bg-green-500 text-white px-2 py-1 rounded-md"
+              onClick={() => handleSell(reservation._id)}
             >
-              Buy
+              Sell
             </button>
-            <p>Owner: {reservation.owner.username}</p>
-          </>
-        ) : (
-          <button
-            className="bg-green-500 text-white px-2 py-1 rounded-md ml-2"
-            onClick={() => handleSell(reservation._id)}
-          >
-            Sell
-          </button>
-        )}
+          )}
+        </div>
       </>
     );
   };
@@ -126,13 +127,16 @@ const ReservationAccordion = (props) => {
   return (
     <>
       <Accordion open={open === 1} icon={<ArrowIcon id={1} open={open} />}>
-        <AccordionHeader onClick={() => handleOpen(1)}>
+        <AccordionHeader
+          className="text-base ml-6 w-11/12"
+          onClick={() => handleOpen(1)}
+        >
           Click to view available reservations
         </AccordionHeader>
         <AccordionBody>
           <div className="bg-white p-3 shadow-sm rounded-sm">
-            <div className="grid grid-cols-2">
-              <div>
+            <div className="grid grid-cols-2 divide-x divide-gray-300">
+              <div className="pr-4">
                 <div className="flex items-center space-x-2 font-semibold text-gray-900 leading-8 mb-3">
                   <span clas="text-green-500">
                     <svg
@@ -164,7 +168,7 @@ const ReservationAccordion = (props) => {
                   <p>No Available Requests</p>
                 )}
               </div>
-              <div>
+              <div className="pl-4">
                 <div className="flex items-center space-x-2 font-semibold text-gray-900 leading-8 mb-3">
                   <span clas="text-green-500">
                     <svg

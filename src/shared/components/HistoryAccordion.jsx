@@ -42,7 +42,7 @@ const HistoryAccordion = (props) => {
     (reservation) => reservation.type === "request"
   );
 
-  const soldOffers = props.userSold.filter(
+  const boughtOffers = props.userBought.filter(
     (reservation) => reservation.type === "offer"
   );
 
@@ -54,8 +54,8 @@ const HistoryAccordion = (props) => {
         </AccordionHeader>
         <AccordionBody>
           <div className="bg-white p-3 shadow-sm rounded-sm">
-            <div className="grid grid-cols-2">
-              <div>
+            <div className="grid grid-cols-2 divide-x divide-gray-300">
+              <div className="pr-4">
                 <div className="flex items-center space-x-2 font-semibold text-gray-900 leading-8 mb-3">
                   <span clas="text-green-500">
                     <svg
@@ -73,21 +73,21 @@ const HistoryAccordion = (props) => {
                       />
                     </svg>
                   </span>
-                  <span className="tracking-wide">Past Requests</span>
+                  <span className="tracking-wide">Bought Reservations</span>
                 </div>
-                {soldRequests.length > 0 ? (
+                {boughtOffers.length > 0 ? (
                   <ul className="list-inside space-y-2">
-                    {soldRequests.map((reservation) => (
+                    {boughtOffers.map((reservation) => (
                       <li key={reservation._id}>
                         {renderReservationItem(reservation)}
                       </li>
                     ))}
                   </ul>
                 ) : (
-                  <p>No Active Requests</p>
+                  <p>No Active Offers</p>
                 )}
               </div>
-              <div>
+              <div className="pl-4">
                 <div className="flex items-center space-x-2 font-semibold text-gray-900 leading-8 mb-3">
                   <span clas="text-green-500">
                     <svg
@@ -110,18 +110,19 @@ const HistoryAccordion = (props) => {
                       />
                     </svg>
                   </span>
-                  <span className="tracking-wide">Past Offers</span>
+                  <span className="tracking-wide">Sold Reservations</span>
                 </div>
-                {soldOffers.length > 0 ? (
+
+                {soldRequests.length > 0 ? (
                   <ul className="list-inside space-y-2">
-                    {soldOffers.map((reservation) => (
+                    {soldRequests.map((reservation) => (
                       <li key={reservation._id}>
                         {renderReservationItem(reservation)}
                       </li>
                     ))}
                   </ul>
                 ) : (
-                  <p>No Active Offers</p>
+                  <p>No Active Requests</p>
                 )}
               </div>
             </div>

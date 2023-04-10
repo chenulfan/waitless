@@ -26,6 +26,7 @@ const Profile = () => {
   const [userOffers, setUserOffers] = useState([]);
   const [userRequests, setUserRequests] = useState([]);
   const [userSold, setUserSold] = useState([]);
+  const [userBought, setUserBought] = useState([]);
   const { currentUser, logout } = useAuth();
 
   const fetchUserData = async (username) => {
@@ -48,6 +49,7 @@ const Profile = () => {
       setUserOffers(response.data.reservations.offers);
       setUserRequests(response.data.reservations.requests);
       setUserSold(response.data.reservations.sold);
+      setUserBought(response.data.reservations.bought);
       console.log(response.data.reservations);
     } catch (error) {
       console.error("Error fetching user reservations:", error);
@@ -179,8 +181,8 @@ const Profile = () => {
 
           {/* <!-- Reservations --> */}
           <div className="bg-white p-3 shadow-sm rounded-sm">
-            <div className="grid grid-cols-2">
-              <div>
+            <div className="grid grid-cols-2 divide-x divide-gray-300">
+              <div className="pr-4">
                 <div className="flex items-center space-x-2 font-semibold text-gray-900 leading-8 mb-3">
                   <span clas="text-green-500">
                     <svg
@@ -212,7 +214,7 @@ const Profile = () => {
                   <p>No Active Requests</p>
                 )}
               </div>
-              <div>
+              <div className="pl-4">
                 <div className="flex items-center space-x-2 font-semibold text-gray-900 leading-8 mb-3">
                   <span clas="text-green-500">
                     <svg
@@ -255,6 +257,7 @@ const Profile = () => {
               userOffers={userOffers}
               userRequests={userRequests}
               userSold={userSold}
+              userBought={userBought}
             />
           </div>
           {/* <!-- End of Reservations grid --> */}
