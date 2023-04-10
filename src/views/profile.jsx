@@ -4,7 +4,10 @@ import { useAuth } from "../utils/AuthContext";
 import axios from "axios";
 import HistoryAccordion from "../shared/components/HistoryAccordion";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faHandPointUp, faBellConcierge } from "@fortawesome/free-solid-svg-icons";
+import {
+  faHandPointUp,
+  faBellConcierge,
+} from "@fortawesome/free-solid-svg-icons";
 function Icon({ id, open }) {
   return (
     <svg
@@ -28,6 +31,9 @@ const Profile = () => {
   const [userRequests, setUserRequests] = useState([]);
   const [userSold, setUserSold] = useState([]);
   const [userBought, setUserBought] = useState([]);
+  const [userTotalTransacted, setUserTotalTransacted] =
+    useState("Loading...");
+
   const { currentUser, logout } = useAuth();
 
   const fetchUserData = async (username) => {
@@ -51,6 +57,11 @@ const Profile = () => {
       setUserRequests(response.data.reservations.requests);
       setUserSold(response.data.reservations.sold);
       setUserBought(response.data.reservations.bought);
+      const totalTransacted = new Set([
+        ...response.data.reservations.bought,
+        ...response.data.reservations.sold,
+      ]);
+      setUserTotalTransacted(totalTransacted.size);
       console.log(response.data.reservations);
     } catch (error) {
       console.error("Error fetching user reservations:", error);
@@ -81,12 +92,6 @@ const Profile = () => {
         <div className="text-gray-500 text-xs">{formattedDate}</div>
       </>
     );
-  };
-
-  const filterReservationByDate = (reservation) => {
-    const today = new Date();
-    const reservationDate = new Date(reservation.date);
-    return reservationDate >= today;
   };
 
   return (
@@ -145,20 +150,10 @@ const Profile = () => {
             <div className="text-gray-700">
               <div className="grid md:grid-cols-2 text-sm">
                 <div className="grid grid-cols-2">
-                  <div className="px-4 py-2 font-semibold">First Name</div>
+                  <div className="px-4 py-2 font-semibold">Name</div>
                   <div className="px-4 py-2">
                     {userData ? userData.fullname : "Loading..."}
                   </div>
-                </div>
-                <div className="grid grid-cols-2">
-                  <div className="px-4 py-2 font-semibold">Last Name</div>
-                  <div className="px-4 py-2">
-                    {userData ? userData.fullname : "Loading..."}
-                  </div>
-                </div>
-                <div className="grid grid-cols-2">
-                  <div className="px-4 py-2 font-semibold">Gender</div>
-                  <div className="px-4 py-2">Male</div>
                 </div>
                 <div className="grid grid-cols-2">
                   <div className="px-4 py-2 font-semibold">Contact No.</div>
@@ -166,11 +161,18 @@ const Profile = () => {
                     {userData ? userData.phone : "Loading..."}
                   </div>
                 </div>
-
                 <div className="grid grid-cols-2">
                   <div className="px-4 py-2 font-semibold">Email</div>
                   <div className="px-4 py-2">
                     {userData ? userData.email : "Loading..."}
+                  </div>
+                </div>{" "}
+                <div className="grid grid-cols-2">
+                  <div className="px-4 py-2 font-semibold">
+                    Total Transacted
+                  </div>
+                  <div className="px-4 py-2">
+                    {userData ? userTotalTransacted : "Loading..."}
                   </div>
                 </div>
               </div>

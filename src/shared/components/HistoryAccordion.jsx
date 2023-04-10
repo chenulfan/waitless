@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState,useEffect } from "react";
 import {
   Accordion,
   AccordionHeader,
@@ -42,14 +42,7 @@ const HistoryAccordion = (props) => {
       </>
     );
   };
-
-  const soldRequests = props.userSold.filter(
-    (reservation) => reservation.type === "request"
-  );
-
-  const boughtOffers = props.userBought.filter(
-    (reservation) => reservation.type === "offer"
-  );
+  
 
   return (
     <>
@@ -67,9 +60,9 @@ const HistoryAccordion = (props) => {
                   </span>
                   <span className="tracking-wide">Bought Reservations</span>
                 </div>
-                {boughtOffers.length > 0 ? (
+                {props.userBought.length > 0 ? (
                   <ul className="list-inside space-y-2">
-                    {boughtOffers.map((reservation) => (
+                    {props.userBought.map((reservation) => (
                       <li key={reservation._id}>
                         {renderReservationItem(reservation)}
                       </li>
@@ -87,9 +80,9 @@ const HistoryAccordion = (props) => {
                   <span className="tracking-wide">Sold Reservations</span>
                 </div>
 
-                {soldRequests.length > 0 ? (
+                {props.userSold.length > 0 ? (
                   <ul className="list-inside space-y-2">
-                    {soldRequests.map((reservation) => (
+                    {props.userSold.map((reservation) => (
                       <li key={reservation._id}>
                         {renderReservationItem(reservation)}
                       </li>

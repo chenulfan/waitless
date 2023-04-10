@@ -88,15 +88,15 @@ const Home = () => {
 
   return (
     <div>
-      <div className="flex items-center "> 
-        <div className="flex-initial ml-4">
+      <div className="flex items-center ">
+        <div className="flex-initial ml-4 w-5/12">
           <SearchInput
             label="MY LABEL"
             placeholder="Search For a Restaurant"
             handleInputChangeCB={onChangeSearchInput}
           />
         </div>
-        <div className=" ml-4">
+        <div className=" ml-4 w-4/12">
           <Select
             className="border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block"
             isSearchable={true}
@@ -107,18 +107,16 @@ const Home = () => {
             name="categories"
             placeholder="Filter"
             options={REST_CAT}
-            styles={{ 
+            styles={{
               control: (provided, state) => ({
                 ...provided,
-                height: '43px',
-                marginTop: '5px',
-                
-              })
+                //height:"43px",
+                marginTop: "5px",
+              }),
             }}
-          
           />
         </div>
-        <div className="flex-initial ml-4">
+        <div className="flex-initial ml-4 w-2/12">
           {" "}
           <button
             onClick={handleShowModal}
