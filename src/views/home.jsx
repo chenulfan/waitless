@@ -88,35 +88,48 @@ const Home = () => {
 
   return (
     <div>
-      <div className="flex">
-        <div className="flex-initial w-64 ml-4">
+      <div className="flex items-center "> 
+        <div className="flex-initial ml-4">
           <SearchInput
             label="MY LABEL"
             placeholder="Search For a Restaurant"
             handleInputChangeCB={onChangeSearchInput}
           />
         </div>
-        <div className="flex-initial w-64 ml-4 mt-7">
+        <div className=" ml-4">
           <Select
+            className="border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block"
             isSearchable={true}
             onChange={(value) => {
               setSelectedCategories(value);
             }}
             isMulti
             name="categories"
-            placeholder="Select Categories"
+            placeholder="Filter"
             options={REST_CAT}
+            styles={{ 
+              control: (provided, state) => ({
+                ...provided,
+                height: '43px',
+                marginTop: '5px',
+                
+              })
+            }}
+          
           />
         </div>
-        <button
-          onClick={handleShowModal}
-          data-modal-target="authentication-modal"
-          data-modal-toggle="authentication-modal"
-          className="flex-none w-14 h-14 mt-5 ml-3 bg-blue-500 hover:bg-blue-400 text-white font-bold py-2 px-4 border-b-4 border-blue-700 hover:border-blue-500 rounded-full"
-          type="button"
-        >
-          {addSvg}
-        </button>
+        <div className="flex-initial ml-4">
+          {" "}
+          <button
+            onClick={handleShowModal}
+            data-modal-target="authentication-modal"
+            data-modal-toggle="authentication-modal"
+            className="w-14 h-14 bg-blue-500 hover:bg-blue-400 text-white font-bold py-2 px-4 border-b-4 border-blue-700 hover:border-blue-500 rounded-full"
+            type="button"
+          >
+            {addSvg}
+          </button>
+        </div>
 
         {showModal && (
           <NewForm
