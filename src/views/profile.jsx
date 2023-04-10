@@ -23,7 +23,9 @@ function Icon({ id, open }) {
 
 const Profile = () => {
   const [userData, setUserData] = useState(null);
-  const [userReservations, setUserReservations] = useState([]);
+  const [userOffers, setUserOffers] = useState([]);
+  const [userRequests, setUserRequests] = useState([]);
+  const [userSold, setUserSold] = useState([]);
   const { currentUser, logout } = useAuth();
 
   const fetchUserData = async (username) => {
@@ -40,12 +42,13 @@ const Profile = () => {
 
   const fetchUserReservations = async (userId) => {
     try {
-      const response = await axios.get(
-        `http://localhost:3030/api/reservations/user/${userId}`,
-        { withCredentials: true }
-      );
-      setUserReservations(response.data);
-      console.log(response.data);
+      const response = await axios.get(`http://localhost:3030/api/users/me`, {
+        withCredentials: true,
+      });
+      setUserOffers(response.data.reservations.offers);
+      setUserRequests(response.data.reservations.requests);
+      setUserSold(response.data.reservations.sold);
+      console.log(response.data.reservations);
     } catch (error) {
       console.error("Error fetching user reservations:", error);
     }
@@ -82,20 +85,6 @@ const Profile = () => {
     const reservationDate = new Date(reservation.date);
     return reservationDate >= today;
   };
-
-  // Filter active requests
-  const activeRequests = userReservations.filter(
-    (reservation) =>
-      reservation.type === "request" && filterReservationByDate(reservation)
-    //add active status to db instead of filtering by date
-  );
-
-  // Filter active offers
-  const activeOffers = userReservations.filter(
-    (reservation) =>
-      reservation.type === "offer" && filterReservationByDate(reservation)
-    //add active status to db instead of filtering by date
-  );
 
   return (
     <div className="container mx-auto my-5 p-5">
@@ -211,9 +200,9 @@ const Profile = () => {
                   </span>
                   <span className="tracking-wide">Active Requests</span>
                 </div>
-                {activeRequests.length > 0 ? (
+                {userRequests.length > 0 ? (
                   <ul className="list-inside space-y-2">
-                    {activeRequests.map((reservation) => (
+                    {userRequests.map((reservation) => (
                       <li key={reservation._id}>
                         {renderReservationItem(reservation)}
                       </li>
@@ -248,9 +237,9 @@ const Profile = () => {
                   </span>
                   <span className="tracking-wide">Active Offers</span>
                 </div>
-                {activeOffers.length > 0 ? (
+                {userOffers.length > 0 ? (
                   <ul className="list-inside space-y-2">
-                    {activeOffers.map((reservation) => (
+                    {userOffers.map((reservation) => (
                       <li key={reservation._id}>
                         {renderReservationItem(reservation)}
                       </li>
@@ -262,7 +251,11 @@ const Profile = () => {
               </div>
             </div>
 
-            <HistoryAccordion userReservations={userReservations} />
+            <HistoryAccordion
+              userOffers={userOffers}
+              userRequests={userRequests}
+              userSold={userSold}
+            />
           </div>
           {/* <!-- End of Reservations grid --> */}
           {/* <!-- End of profile tab --> */}

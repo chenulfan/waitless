@@ -38,24 +38,12 @@ const HistoryAccordion = (props) => {
     );
   };
 
-  const filterReservationByDate = (reservation) => {
-    const today = new Date();
-    const reservationDate = new Date(reservation.date);
-    return reservationDate < today;
-  };
-
-  // Filter active requests
-  const activeRequests = props.userReservations.filter(
-    (reservation) =>
-      reservation.type === "request" && filterReservationByDate(reservation)
-    //add active status to db instead of filtering by date
+  const soldRequests = props.userSold.filter(
+    (reservation) => reservation.type === "request"
   );
 
-  // Filter active offers
-  const activeOffers = props.userReservations.filter(
-    (reservation) =>
-      reservation.type === "offer" && filterReservationByDate(reservation)
-    //add active status to db instead of filtering by date
+  const soldOffers = props.userSold.filter(
+    (reservation) => reservation.type === "offer"
   );
 
   return (
@@ -87,9 +75,9 @@ const HistoryAccordion = (props) => {
                   </span>
                   <span className="tracking-wide">Past Requests</span>
                 </div>
-                {activeRequests.length > 0 ? (
+                {soldRequests.length > 0 ? (
                   <ul className="list-inside space-y-2">
-                    {activeRequests.map((reservation) => (
+                    {soldRequests.map((reservation) => (
                       <li key={reservation._id}>
                         {renderReservationItem(reservation)}
                       </li>
@@ -124,9 +112,9 @@ const HistoryAccordion = (props) => {
                   </span>
                   <span className="tracking-wide">Past Offers</span>
                 </div>
-                {activeOffers.length > 0 ? (
+                {soldOffers.length > 0 ? (
                   <ul className="list-inside space-y-2">
-                    {activeOffers.map((reservation) => (
+                    {soldOffers.map((reservation) => (
                       <li key={reservation._id}>
                         {renderReservationItem(reservation)}
                       </li>
