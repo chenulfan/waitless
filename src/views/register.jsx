@@ -1,17 +1,14 @@
-import { Button } from "../shared/components/button";
 import { useFormik } from "formik";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
+import { DB_URL } from "../constants";
 
 const Register = () => {
   const navigate = useNavigate();
 
   const registerUser = async (userData) => {
     try {
-      const response = await axios.post(
-        "http://localhost:3030/auth/register",
-        userData
-      );
+      const response = await axios.post(`${DB_URL}/auth/register`, userData);
       return response.data;
     } catch (error) {
       console.error("Error registering user:", error);

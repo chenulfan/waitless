@@ -1,6 +1,4 @@
 import Tag from "./tag";
-import axios from "axios";
-import { useState, useEffect } from "react";
 import ReservationAccordion from "./ReservationAccordion";
 
 const Card = ({ img, imgAlt, title, description, tags, reservations }) => {

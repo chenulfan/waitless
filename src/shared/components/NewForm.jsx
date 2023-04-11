@@ -6,6 +6,7 @@ import * as Yup from "yup";
 import "react-datepicker/dist/react-datepicker.css";
 import { Link } from "react-router-dom";
 import axios from "axios";
+import { DB_URL } from "../../constants";
 
 const NewForm = (props) => {
   const [startDate, setStartDate] = useState(new Date());
@@ -74,7 +75,7 @@ const NewForm = (props) => {
   const submitReservation = async (reservationData) => {
     try {
       const response = await axios.post(
-        "http://localhost:3030/api/reservations",
+        `${DB_URL}/api/reservations`,
         reservationData,
         {
           withCredentials: true,

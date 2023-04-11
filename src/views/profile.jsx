@@ -8,22 +8,7 @@ import {
   faHandPointUp,
   faBellConcierge,
 } from "@fortawesome/free-solid-svg-icons";
-function Icon({ id, open }) {
-  return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      className={`${
-        id === open ? "rotate-180" : ""
-      } h-5 w-5 transition-transform`}
-      fill="none"
-      viewBox="0 0 24 24"
-      stroke="currentColor"
-      strokeWidth={2}
-    >
-      <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
-    </svg>
-  );
-}
+import { DB_URL } from "../constants";
 
 const Profile = () => {
   const [userData, setUserData] = useState(null);
@@ -31,17 +16,15 @@ const Profile = () => {
   const [userRequests, setUserRequests] = useState([]);
   const [userSold, setUserSold] = useState([]);
   const [userBought, setUserBought] = useState([]);
-  const [userTotalTransacted, setUserTotalTransacted] =
-    useState("Loading...");
+  const [userTotalTransacted, setUserTotalTransacted] = useState("Loading...");
 
   const { currentUser, logout } = useAuth();
 
   const fetchUserData = async (username) => {
     try {
-      const response = await axios.get(
-        `http://localhost:3030/api/users/${username}`,
-        { withCredentials: true }
-      );
+      const response = await axios.get(`${DB_URL}/api/users/${username}`, {
+        withCredentials: true,
+      });
       setUserData(response.data);
     } catch (error) {
       console.error("Error fetching user data:", error);
@@ -50,7 +33,7 @@ const Profile = () => {
 
   const fetchUserReservations = async (userId) => {
     try {
-      const response = await axios.get(`http://localhost:3030/api/users/me`, {
+      const response = await axios.get(`${DB_URL}/api/users/me`, {
         withCredentials: true,
       });
       setUserOffers(response.data.reservations.offers);

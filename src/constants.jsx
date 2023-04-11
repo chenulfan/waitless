@@ -1,3 +1,5 @@
+export const DB_URL = "https://waitless.up.railway.app";
+
 export const DUMMY_ARR = [
   {
     id: 1,

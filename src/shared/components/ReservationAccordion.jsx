@@ -6,7 +6,12 @@ import {
 } from "@material-tailwind/react";
 import axios from "axios";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faHandPointUp, faBellConcierge } from "@fortawesome/free-solid-svg-icons";
+import {
+  faHandPointUp,
+  faBellConcierge,
+} from "@fortawesome/free-solid-svg-icons";
+import { DB_URL } from "../../constants";
+
 const ArrowIcon = ({ id, open }) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
@@ -31,12 +36,9 @@ const ReservationAccordion = (props) => {
 
   const fetchReservation = async (id) => {
     try {
-      const response = await axios.get(
-        `http://localhost:3030/api/reservations/${id}`,
-        {
-          withCredentials: true,
-        }
-      );
+      const response = await axios.get(`${DB_URL}/api/reservations/${id}`, {
+        withCredentials: true,
+      });
       return response.data;
     } catch (error) {
       console.error("Error fetching reservation:", error);
@@ -64,7 +66,7 @@ const ReservationAccordion = (props) => {
   const handleBuy = async (reservationId) => {
     try {
       await axios.put(
-        `http://localhost:3030/api/reservations/buy/${reservationId}`,
+        `${DB_URL}/api/reservations/buy/${reservationId}`,
         {},
         { withCredentials: true }
       );

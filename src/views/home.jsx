@@ -5,7 +5,7 @@ import axios from "axios";
 import NewForm from "../shared/components/NewForm";
 import addSvg from "../shared/svgs/add";
 import Select from "react-select";
-import { DUMMY_ARR, REST_CAT } from "../shared/constants";
+import { DUMMY_ARR, REST_CAT, DB_URL } from "../constants";
 import { useAuth } from "../utils/AuthContext";
 
 const Home = () => {
@@ -20,12 +20,9 @@ const Home = () => {
 
   const fetchRestaurants = async () => {
     try {
-      const response = await axios.get(
-        "http://localhost:3030/api/restaurants",
-        {
-          withCredentials: true,
-        }
-      );
+      const response = await axios.get(`${DB_URL}/api/restaurants`, {
+        withCredentials: true,
+      });
       setRestaurants(response.data);
       console.log(response.data);
     } catch (error) {
@@ -33,7 +30,22 @@ const Home = () => {
     }
   };
 
+  const checkHealth = async () => {
+    try {
+      const response = await axios.get(
+        "https://waitless.up.railway.app/health",
+        {
+          withCredentials: true,
+        }
+      );
+      console.log(response.data);
+    } catch (error) {
+      console.error("Error check health:", error);
+    }
+  };
+
   useEffect(() => {
+    checkHealth();
     fetchRestaurants();
   }, []);
 

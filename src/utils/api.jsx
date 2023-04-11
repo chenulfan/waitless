@@ -1,7 +1,8 @@
 import axios from "axios";
+import { DB_URL } from "../constants";
 
 const instance = axios.create({
-  baseURL: "http://localhost:3030",
+  baseURL: DB_URL,
   withCredentials: true,
 });
 
