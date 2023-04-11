@@ -142,7 +142,7 @@ const ReservationAccordion = (props) => {
                   <span clas="text-green-500">
                     <FontAwesomeIcon icon={faHandPointUp} />
                   </span>
-                  <span className="tracking-wide">Available Requests</span>
+                  <span className="tracking-wide">Requests</span>
                 </div>
                 {requests.length > 0 ? (
                   <ul className="list-inside space-y-2">
@@ -161,7 +161,7 @@ const ReservationAccordion = (props) => {
                   <span clas="text-green-500">
                     <FontAwesomeIcon icon={faBellConcierge} />
                   </span>
-                  <span className="tracking-wide">Available Offers</span>
+                  <span className="tracking-wide">Offers</span>
                 </div>
                 {offers.length > 0 ? (
                   <ul className="list-inside space-y-2">
