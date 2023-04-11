@@ -8,7 +8,6 @@ import Login from "./views/login";
 import Register from "./views/register";
 import Profile from "./views/profile";
 import { PageNotFound } from "./views/PageNotFound";
-import { Notifications } from "react-push-notification";
 import { AuthProvider } from "./utils/AuthContext";
 import { createRoot } from "react-dom/client";
 import { initializeApp } from 'firebase/app';
@@ -31,7 +30,6 @@ createRoot(document.getElementById("root")).render(
   <React.Suspense>
     <AuthProvider>
       <div className="h-screen w-screen">
-        <Notifications />
         <div className="h-[calc(100%-60px)]">
           <BrowserRouter>
             <Header>
