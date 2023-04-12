@@ -1,5 +1,5 @@
 import { useFormik } from "formik";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { loginUser } from "../utils/api";
 import { useAuth } from "../utils/AuthContext";
 
